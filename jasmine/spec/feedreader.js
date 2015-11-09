@@ -97,7 +97,7 @@ $(function() {
          beforeEach(function(done) {
             loadFeed(0, function() {
                 done();
-            })
+            });
          });
 
          it('after loadFeed, there is at least a single entry element in the feed container', function(done) {
@@ -107,10 +107,38 @@ $(function() {
     });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
-
+    describe('New Feed Selection', function() {
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+         var previousFeedData = [];
+
+         beforeEach(function(done) {
+
+            var entries = $('.entry');
+            for(var i = 0, x = entries.length; i < x; ++i) {
+                console.log('before ' + i);
+                previousFeedData.push(entries.get(i));
+            }
+
+            loadFeed(1, function() {
+                done();
+            });
+         });
+
+        it('load feed new feed correctly', function(done) {
+            var entries = $('.entry');
+            var retVal = true;
+            for(var i = 0, x = Math.min(entries.length, previousFeedData.length); i < x; ++i) {
+                if(retVal) {
+                    retVal = (previousFeedData[i].textContent === entries.get(i).textContent);
+                }
+            }
+            expect(retVal).toBe(false);
+            done();
+        });
+
+     });
 
 }());

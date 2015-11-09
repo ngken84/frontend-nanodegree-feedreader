@@ -69,6 +69,7 @@ $(function() {
             loadFeed(0, done);
          });
 
+         // Ensure that after loading a feed, there is at least one entry
          it('after loadFeed, there is at least a single entry element in the feed container', function() {
             expect($('.entry').length).toBeGreaterThan(0);
          });
@@ -77,32 +78,20 @@ $(function() {
     describe('New Feed Selection', function() {
 
          // this holds the previous Feed's entries to compare to the new feed entry
-         var previousFeedData = [];
+         var previousFeedData;
 
          beforeEach(function(done) {
-
-            var entries = $('.entry');
-            for(var i = 0, x = entries.length; i < x; ++i) {
-                previousFeedData.push(entries.get(i));
-            }
-
-            // load data from the next feed
-            loadFeed(1, function() {
-                done();
-            });
+            loadFeed(0, function() {
+                previousFeedData = $('.feed').html();
+                loadFeed(1, done);
+            })
          });
 
-        it('load feed new feed correctly', function(done) {
+        // Test to see if a new feed is selected, the html in the feed div is different
+        it('load feed new feed correctly', function() {
             var entries = $('.entry');
-            var retVal = true;
-            for(var i = 0, x = Math.min(entries.length, previousFeedData.length); i < x; ++i) {
-                // compare contents of the current data and previous data
-                if(retVal) {
-                    retVal = (previousFeedData[i].textContent === entries.get(i).textContent);
-                }
-            }
+            var retVal = $('.feed').html() === previousFeedData;
             expect(retVal).toBe(false);
-            done();
         });
 
      });

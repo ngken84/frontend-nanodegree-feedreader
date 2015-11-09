@@ -112,16 +112,18 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+
+         // this holds the previous Feed's entries to compare to the new feed entry
          var previousFeedData = [];
 
          beforeEach(function(done) {
 
             var entries = $('.entry');
             for(var i = 0, x = entries.length; i < x; ++i) {
-                console.log('before ' + i);
                 previousFeedData.push(entries.get(i));
             }
 
+            // load data from the next feed
             loadFeed(1, function() {
                 done();
             });
@@ -131,6 +133,7 @@ $(function() {
             var entries = $('.entry');
             var retVal = true;
             for(var i = 0, x = Math.min(entries.length, previousFeedData.length); i < x; ++i) {
+                // compare contents of the current data and previous data
                 if(retVal) {
                     retVal = (previousFeedData[i].textContent === entries.get(i).textContent);
                 }

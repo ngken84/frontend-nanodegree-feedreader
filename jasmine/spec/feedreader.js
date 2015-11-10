@@ -36,7 +36,6 @@ $(function() {
             }
          });
 
-
         // Tests to determine that each feed's name is defined and 
          // not empty
          it('each feed should have a name', function() {
@@ -44,7 +43,36 @@ $(function() {
                 expect(allFeeds[i].name.length).toBeGreaterThan(0);
             }
          });
+
+         // Test to determine if user is able to add a new feed to 
+         // the application
+         it('user is able to add a new feed', function() {
+            var newFeed = { name: 'new feed', url: 'http://www.fake.net'};
+            addNewFeed(newFeed);
+            var testVal = $.inArray(newFeed, allFeeds);
+            expect(testVal).toBe(true);
+         });
+
+         // Test to determine if user is able to remove a feed
+         it('user is able to remove a feed', function() {
+            var feedToRemove = allFeeds[0];
+            removeFeed(0);
+            var testVal = $.inArray(feedToRemove, allFeeds);
+            expect(testVal).toBe(false);
+         });
+
     });
+
+    describe('Favorite Feeds', function() {
+
+        // Test to determine if a user is able to add a favorite feed
+        it('user is able to add a favorite feed', function() {
+            var newFavFeed = allFeeds[0];
+            addFavoriteFeed(newFavFeed);
+            var testVal = $.inArray(newFavFeed, favoriteFeeds);
+            expect(testVal).toBe(true);
+        });
+    })
 
     describe('The menu', function() {
 
@@ -59,6 +87,8 @@ $(function() {
           it('menu is not hidden on menu link click', function() {
             $('.menu-icon-link').trigger('click');
             expect(body.hasClass('menu-hidden')).toBe(false);
+            $('.menu-icon-link').trigger('click');
+            expect(body.hasClass('menu-hidden')).toBe(true);
           });
 
       });
